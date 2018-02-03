@@ -2,12 +2,13 @@
   "name": "googvarm",
   "version": "1.0.0",
   "description": "Go' og varm website",
-  "main": "src/index.js",
+  "main": "target/index.html",
   "repository": "git@bitbucket.org:VegarM/googvarm-elm.git",
   "author": "Vegar Molvig",
   "license": "DS",
   "private": true,
   "dependencies": {
-    "elm": "^0.18.0"
+    "elm": "^0.18.0",
+    "elm-format": "^0.6.1-alpha"
   }
 }
