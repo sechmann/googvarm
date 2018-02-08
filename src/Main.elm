@@ -1,12 +1,11 @@
 module Main exposing (..)
 
-import Html exposing (Html, button, div, text, img, ul, li, a)
-import Html.Attributes exposing (src, class, classList, style)
 import Msgs exposing (Msg(..))
-import Pure
-import String
-import Menu exposing (menuItem)
+import Html exposing (Html)
 import Navigation
+import Element exposing (..)
+import Menu exposing (navbar)
+import Stylesheet exposing (stylesheet, Styles(..), NavigationStyles(..))
 
 
 main : Program Never Model Msg
@@ -52,7 +51,7 @@ update msg model =
 -- VIEW
 
 
-viewPage : Maybe Navigation.Location -> Html Msg
+viewPage : Maybe Navigation.Location -> Element style variation msg
 viewPage page =
     case page of
         Just location ->
@@ -62,31 +61,15 @@ viewPage page =
             text "Nothing"
 
 
-view : Model -> Html Msg
+view : Model -> Html msg
 view model =
     let
         page =
             List.head model.history
     in
-        div [ class Pure.grid ]
-            [ div [ class "pure-u-3-5" ]
-                [ img
-                    [ style
-                        [ ( "display", "block" )
-                        , ( "margin", "auto" )
-                        ]
-                    , src "/assets/logo.svg"
-                    ]
-                    []
-                , div [ class (String.join " " [ Pure.menu, Pure.menuHorizontal ]) ]
-                    [ ul [ class Pure.menuList ]
-                        [ menuItem "item one" "one"
-                        , menuItem "item two" "two"
-                        , menuItem "item three" "five"
-                        , menuItem "item four" "four"
-                        , menuItem "item aulon" "AULON"
-                        ]
-                    ]
+        Element.layout stylesheet <|
+            column NoStyle
+                []
+                [ navbar
+                , el NoStyle [] (viewPage page)
                 ]
-            , div [ class "pure-u-3-5" ] [ viewPage page ]
-            ]

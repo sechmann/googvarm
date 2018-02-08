@@ -5,8 +5,7 @@
     "license": "BSD3",
     "source-directories": [
         ".",
-        "src",
-        "./github.com/benthepoet/elm-purecss/src"
+        "src"
     ],
     "exposed-modules": [],
     "dependencies": {
