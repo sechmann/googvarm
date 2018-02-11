@@ -1,14 +1,7 @@
 {
-  "name": "googvarm",
-  "version": "1.0.0",
-  "description": "Go' og varm website",
-  "main": "target/index.html",
-  "repository": "git@bitbucket.org:VegarM/googvarm-elm.git",
-  "author": "Vegar Molvig",
-  "license": "DS",
-  "private": true,
-  "dependencies": {
-    "elm": "^0.18.0",
-    "elm-format": "^0.6.1-alpha"
+  "devDependencies": {
+    "elm-webpack-loader": "^4.4.0",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
   }
 }
