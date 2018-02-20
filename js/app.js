@@ -1,3 +1,4 @@
+//import 'purecss'
 import Elm from '../src/Main.elm'
 
 const div = document.getElementById('main')

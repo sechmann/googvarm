@@ -1,6 +1,8 @@
 {
   "devDependencies": {
+    "css-loader": "^0.28.9",
     "elm-webpack-loader": "^4.4.0",
+    "purecss": "^1.0.0",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"
   }

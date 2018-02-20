@@ -1,28 +1,39 @@
 module Main exposing (..)
 
-import Msgs exposing (Msg(..))
 import Html exposing (Html)
-import Navigation
-import Element exposing (..)
-import Menu exposing (navbar)
-import Stylesheet exposing (stylesheet, Styles(..), NavigationStyles(..))
+import Navigation exposing (Location)
+import Json.Decode as Decode exposing (Value)
+import Route exposing (Route)
+import Page.Home as Home
+import Page.Contact as Contact
+import Page.Errored as Errored exposing (PageLoadError)
+import Task exposing (Task)
+import Util exposing ((=>))
+import Views.Page as Page exposing (ActivePage)
 
 
-main : Program Never Model Msg
-main =
-    Navigation.program UrlChange
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = (\_ -> Sub.none)
-        }
+type Page
+    = Blank
+    | Errored PageLoadError
+    | NotFound
+    | Home Home.Model
+    | Contact Contact.Model
 
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
-    ( Model [ location ]
-    , Cmd.none
-    )
+type PageState
+    = Loaded Page
+    | TransitioningFrom Page
+
+
+init : Value -> Location -> ( Model, Cmd Msg )
+init val location =
+    setRoute (Route.fromLocation location)
+        { pageState = Loaded initialPage }
+
+
+initialPage : Page
+initialPage =
+    Blank
 
 
 
@@ -30,7 +41,7 @@ init location =
 
 
 type alias Model =
-    { history : List Navigation.Location
+    { pageState : PageState
     }
 
 
@@ -38,38 +49,115 @@ type alias Model =
 -- UPDATE
 
 
+type Msg
+    = SetRoute (Maybe Route)
+    | HomeLoaded (Result PageLoadError Home.Model)
+
+
+setRoute : Maybe Route -> Model -> ( Model, Cmd Msg )
+setRoute maybeRoute model =
+    let
+        transition toMsg task =
+            { model | pageState = TransitioningFrom (getPage model.pageState) }
+                => Task.attempt toMsg task
+
+        errored =
+            pageErrored model
+    in
+        case maybeRoute of
+            Nothing ->
+                { model | pageState = Loaded NotFound } => Cmd.none
+
+            Just Route.Home ->
+                { model | pageState = Loaded (Home Home.init) } => Cmd.none
+
+            Just Route.Contact ->
+                { model | pageState = Loaded (Contact Contact.init) } => Cmd.none
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        UrlChange location ->
-            ( { model | history = location :: model.history }
-            , Cmd.none
-            )
+    updatePage (getPage model.pageState) msg model
+
+
+updatePage : Page -> Msg -> Model -> ( Model, Cmd Msg )
+updatePage page msg model =
+    let
+        toPage toModel toMsg subUpdate subMsg subModel =
+            let
+                ( newModel, newCmd ) =
+                    subUpdate subMsg subModel
+            in
+                ( { model | pageState = Loaded (toModel newModel) }, Cmd.map toMsg newCmd )
+    in
+        case ( msg, page ) of
+            ( SetRoute route, _ ) ->
+                setRoute route model
+
+            ( HomeLoaded (Ok subModel), _ ) ->
+                { model | pageState = Loaded (Home subModel) } => Cmd.none
+
+            ( HomeLoaded (Err error), _ ) ->
+                { model | pageState = Loaded (Errored error) } => Cmd.none
 
 
 
 -- VIEW
 
 
-viewPage : Maybe Navigation.Location -> Element style variation msg
-viewPage page =
+viewPage : Bool -> Page -> Html msg
+viewPage isLoading page =
     case page of
-        Just location ->
-            text location.hash
+        Home subModel ->
+            Home.view subModel
 
-        Nothing ->
-            text "Nothing"
+        Blank ->
+            Debug.crash "TODO"
+
+        Errored subModel ->
+            Errored.view subModel
+
+        NotFound ->
+            Debug.crash "TODO"
+
+        Contact subModel ->
+            Contact.view subModel
 
 
 view : Model -> Html msg
 view model =
+    case model.pageState of
+        Loaded page ->
+            viewPage False page
+
+        TransitioningFrom page ->
+            viewPage True page
+
+
+getPage : PageState -> Page
+getPage pageState =
+    case pageState of
+        Loaded page ->
+            page
+
+        TransitioningFrom page ->
+            page
+
+
+pageErrored : Model -> ActivePage -> String -> ( Model, Cmd msg )
+pageErrored model activePage errorMessage =
     let
-        page =
-            List.head model.history
+        error =
+            Errored.pageLoadError activePage errorMessage
     in
-        Element.layout stylesheet <|
-            column NoStyle
-                []
-                [ navbar
-                , el NoStyle [] (viewPage page)
-                ]
+        { model | pageState = Loaded (Errored error) } => Cmd.none
+
+
+main : Program Value Model Msg
+main =
+    Navigation.programWithFlags (Route.fromLocation >> SetRoute)
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = (\_ -> Sub.none)
+        }

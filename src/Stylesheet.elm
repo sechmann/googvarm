@@ -17,6 +17,7 @@ colors =
 
 type Styles
     = Title
+    | Background
     | Subtitle
     | NoStyle
     | Product ProductStyles
@@ -47,9 +48,12 @@ stylesheet =
             [ --subtitle styles
               Font.size 25
             ]
-        , style Navbar
+        , style Background
             [ Color.background colors.blue1
-            , Font.typeface [ Font.font "helvetica" ]
+            ]
+        , style Navbar
+            [ Font.typeface [ Font.font "helvetica" ]
+            , Color.background colors.green1
             ]
         , style (Nav Link)
             [ Font.size 12
