@@ -13,21 +13,32 @@ type ActivePage
     | Contact
 
 
+navlink route alt =
+    href route (el (Nav Link) [ padding 5 ] (text alt))
+
+
 frame : List (Element Styles variation msg) -> Html msg
 frame content =
     let
         siteHeader =
             header NoStyle
-                [ center ]
-                (image NoStyle [] { src = "assets/logo.svg", caption = "Go og varm" })
+                []
+                (image NoStyle [ center ] { src = "assets/logo.svg", caption = "Go og varm" })
 
         siteNav =
             navigation Navbar
-                [ center ]
+                []
                 { name = "Main navigation"
                 , options =
-                    [ href Route.Home (el (Nav Link) [] (text "Home"))
-                    , href Route.Contact (el (Nav Link) [] (text "Contact"))
+                    [ navlink Route.Home "Hjem"
+                    , navlink Route.Home "Saueskinn"
+                    , navlink Route.Home "Skinnprodukter"
+                    , navlink Route.Home "Ull til tovind"
+                    , navlink Route.Home "Alpakkagarn"
+                    , navlink Route.Home "Ullgarn"
+                    , navlink Route.Home "Ullundertøy"
+                    , navlink Route.Home "Kurs"
+                    , navlink Route.Contact "Kontakt"
                     ]
                 }
 
@@ -38,7 +49,7 @@ frame content =
     in
         Element.viewport stylesheet <|
             column NoStyle
-                [ center ]
+                [ center, width (percent 100), height (percent 100) ]
                 [ siteHeader
                 , siteNav
                 , column NoStyle [ center ] content

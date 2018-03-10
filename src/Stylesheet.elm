@@ -4,13 +4,13 @@ import Color exposing (rgba)
 import Style exposing (..)
 import Style.Font as Font
 import Style.Color as Color
+import Style.Shadow as Shadow
 
 
 colors =
-    { mauve = rgba 176 161 186 1
-    , blue1 = rgba 165 181 191 1
-    , blue2 = rgba 171 200 199 1
-    , green1 = rgba 184 226 200 1
+    { black = rgba 16 20 25 1
+    , lightblue = rgba 173 217 244 1
+    , blue = rgba 71 108 155 1
     , green2 = rgba 191 240 212 1
     }
 
@@ -49,14 +49,19 @@ stylesheet =
               Font.size 25
             ]
         , style Background
-            [ Color.background colors.blue1
+            [ Color.background colors.blue
             ]
         , style Navbar
             [ Font.typeface [ Font.font "helvetica" ]
-            , Color.background colors.green1
+            , Color.background colors.blue
             ]
         , style (Nav Link)
-            [ Font.size 12
+            [ Font.size 16
+            , Font.typeface [ Font.sansSerif ]
+            , Font.uppercase
+            , Shadow.deep
+            , Color.background colors.lightblue
+            , Color.text colors.black
             ]
         , style (Nav Logo) []
         , style (Product Price)
