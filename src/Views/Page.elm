@@ -33,7 +33,7 @@ frame content =
                     [ navlink Route.Home "Hjem"
                     , navlink Route.Home "Saueskinn"
                     , navlink Route.Home "Skinnprodukter"
-                    , navlink Route.Home "Ull til tovind"
+                    , navlink Route.Home "Ull til toving"
                     , navlink Route.Home "Alpakkagarn"
                     , navlink Route.Home "Ullgarn"
                     , navlink Route.Home "Ullundertøy"
