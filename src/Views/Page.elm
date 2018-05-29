@@ -14,7 +14,7 @@ type ActivePage
 
 
 navlink route alt =
-    href route (el (Nav Link) [ padding 5 ] (text alt))
+    href route (el (Nav Link) [ paddingXY 6 12 ] (text alt))
 
 
 frame : List (Element Styles variation msg) -> Html msg

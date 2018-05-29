@@ -4,6 +4,7 @@ import Color exposing (rgba)
 import Style exposing (..)
 import Style.Font as Font
 import Style.Color as Color
+import Style.Border as Border
 import Style.Shadow as Shadow
 
 
@@ -11,6 +12,7 @@ colors =
     { black = rgba 16 20 25 1
     , lightblue = rgba 173 217 244 1
     , blue = rgba 71 108 155 1
+    , whitesmoke = rgba 245 245 245 1
     , green2 = rgba 191 240 212 1
     }
 
@@ -60,8 +62,10 @@ stylesheet =
             , Font.typeface [ Font.sansSerif ]
             , Font.uppercase
             , Shadow.deep
-            , Color.background colors.lightblue
+            , Color.background colors.whitesmoke
             , Color.text colors.black
+            , hover [ Color.background colors.blue
+            ]
             ]
         , style (Nav Logo) []
         , style (Product Price)
