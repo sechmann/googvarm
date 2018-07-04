@@ -39,6 +39,7 @@ frame content =
                     , navlink Route.Home "Ullundertøy"
                     , navlink Route.Home "Kurs"
                     , navlink Route.Contact "Kontakt"
+                    , navlink Route.Colors "Colors"
                     ]
                 }
 

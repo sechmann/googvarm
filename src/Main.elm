@@ -6,6 +6,7 @@ import Json.Decode as Decode exposing (Value)
 import Route exposing (Route)
 import Page.Home as Home
 import Page.Contact as Contact
+import Page.Colors as Colors
 import Page.Errored as Errored exposing (PageLoadError)
 import Task exposing (Task)
 import Util exposing ((=>))
@@ -14,10 +15,11 @@ import Views.Page as Page exposing (ActivePage)
 
 type Page
     = Blank
-    | Errored PageLoadError
     | NotFound
+    | Errored PageLoadError
     | Home Home.Model
     | Contact Contact.Model
+    | Colors Colors.Model
 
 
 type PageState
@@ -74,6 +76,9 @@ setRoute maybeRoute model =
             Just Route.Contact ->
                 { model | pageState = Loaded (Contact Contact.init) } => Cmd.none
 
+            Just Route.Colors ->
+                { model | pageState = Loaded (Colors Colors.init) } => Cmd.none
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -122,6 +127,9 @@ viewPage isLoading page =
 
         Contact subModel ->
             Contact.view subModel
+
+        Colors subModel ->
+            Colors.view subModel
 
 
 view : Model -> Html msg

@@ -8,6 +8,7 @@ import Navigation exposing (Location)
 type Route
     = Home
     | Contact
+    | Colors
 
 
 route : Parser (Route -> a) a
@@ -15,6 +16,7 @@ route =
     oneOf
         [ Url.map Home (s "")
         , Url.map Contact (s "contact")
+        , Url.map Colors (s "colors")
         ]
 
 
@@ -28,6 +30,8 @@ routeToString page =
 
                 Contact ->
                     [ "contact" ]
+                Colors ->
+                    [ "Colors" ]
     in
         "#/" ++ String.join "/" pieces
 

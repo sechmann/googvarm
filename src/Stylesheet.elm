@@ -1,6 +1,7 @@
 module Stylesheet exposing (stylesheet, Styles(..), NavigationStyles(..), ProductStyles(..))
 
-import Color exposing (rgba)
+import Color exposing (..)
+import Style.Color
 import Style exposing (..)
 import Style.Font as Font
 import Style.Color as Color
@@ -8,13 +9,31 @@ import Style.Border as Border
 import Style.Shadow as Shadow
 
 
-colors =
-    { black = rgba 16 20 25 1
-    , lightblue = rgba 173 217 244 1
-    , blue = rgba 71 108 155 1
-    , whitesmoke = rgba 245 245 245 1
-    , green2 = rgba 191 240 212 1
-    }
+type ColorScheme
+    = BrickRed
+    | Sienna
+    | Tan
+    | DarkOliveGreen
+    | Black
+
+
+color : ColorScheme -> Float -> Color
+color color opacity =
+    case color of
+        Tan ->
+            rgba 207 174 159 opacity
+
+        Black ->
+            rgba 24 21 21 opacity
+
+        Sienna ->
+            rgba 146 73 51 opacity
+
+        DarkOliveGreen ->
+            rgba 77 48 39 opacity
+
+        BrickRed ->
+            rgba 193 49 53 opacity
 
 
 type Styles
@@ -25,6 +44,35 @@ type Styles
     | Product ProductStyles
     | Navbar
     | Nav NavigationStyles
+    | BGRed
+    | BGOrange
+    | BGYellow
+    | BGGreen
+    | BGBlue
+    | BGPurple
+    | BGBrown
+    | BGLightRed
+    | BGLightOrange
+    | BGLightYellow
+    | BGLightGreen
+    | BGLightBlue
+    | BGLightPurple
+    | BGLightBrown
+    | BGDarkRed
+    | BGDarkOrange
+    | BGDarkYellow
+    | BGDarkGreen
+    | BGDarkBlue
+    | BGDarkPurple
+    | BGDarkBrown
+    | BGWhite
+    | BGLightGrey
+    | BGGrey
+    | BGDarkGrey
+    | BGLightCharcoal
+    | BGCharcoal
+    | BGDarkCharcoal
+    | BGBlack
 
 
 type ProductStyles
@@ -51,21 +99,23 @@ stylesheet =
               Font.size 25
             ]
         , style Background
-            [ Color.background colors.blue
+            [ Style.Color.background (color Black 1)
             ]
         , style Navbar
             [ Font.typeface [ Font.font "helvetica" ]
-            , Color.background colors.blue
             ]
         , style (Nav Link)
             [ Font.size 16
             , Font.typeface [ Font.sansSerif ]
             , Font.uppercase
             , Shadow.deep
-            , Color.background colors.whitesmoke
-            , Color.text colors.black
-            , hover [ Color.background colors.blue
-            ]
+            , Border.bottom 1
+            , Style.Color.text (color Black 1)
+            , Color.border (color BrickRed 1)
+            , hover
+                [ Style.Color.background (color Tan 1)
+                , Border.dotted
+                ]
             ]
         , style (Nav Logo) []
         , style (Product Price)
@@ -76,4 +126,33 @@ stylesheet =
             ]
         , style (Product Description) []
         , style (Product Images) []
+        , style BGRed [ Color.background Color.red ]
+        , style BGOrange [ Color.background Color.orange ]
+        , style BGYellow [ Color.background Color.yellow ]
+        , style BGGreen [ Color.background Color.green ]
+        , style BGBlue [ Color.background Color.blue ]
+        , style BGPurple [ Color.background Color.purple ]
+        , style BGBrown [ Color.background Color.brown ]
+        , style BGLightRed [ Color.background Color.lightRed ]
+        , style BGLightOrange [ Color.background Color.lightOrange ]
+        , style BGLightYellow [ Color.background Color.lightYellow ]
+        , style BGLightGreen [ Color.background Color.lightGreen ]
+        , style BGLightBlue [ Color.background Color.lightBlue ]
+        , style BGLightPurple [ Color.background Color.lightPurple ]
+        , style BGLightBrown [ Color.background Color.lightBrown ]
+        , style BGDarkRed [ Color.background Color.darkRed ]
+        , style BGDarkOrange [ Color.background Color.darkOrange ]
+        , style BGDarkYellow [ Color.background Color.darkYellow ]
+        , style BGDarkGreen [ Color.background Color.darkGreen ]
+        , style BGDarkBlue [ Color.background Color.darkBlue ]
+        , style BGDarkPurple [ Color.background Color.darkPurple ]
+        , style BGDarkBrown [ Color.background Color.darkBrown ]
+        , style BGWhite [ Color.background Color.white ]
+        , style BGLightGrey [ Color.background Color.lightGrey ]
+        , style BGGrey [ Color.background Color.grey ]
+        , style BGDarkGrey [ Color.background Color.darkGrey ]
+        , style BGLightCharcoal [ Color.background Color.lightCharcoal ]
+        , style BGCharcoal [ Color.background Color.charcoal ]
+        , style BGDarkCharcoal [ Color.background Color.darkCharcoal ]
+        , style BGBlack [ Color.background Color.black ]
         ]
