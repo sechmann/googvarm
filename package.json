@@ -5,7 +5,9 @@
 		"purecss": "^1.0.0",
 		"webpack": "^4.20.2",
 		"webpack-cli": "^3.1.2",
-		"webpack-dev-server": "^3.1.9"
+		"webpack-dev-server": "^3.1.9",
+		"elm": "^0.19.0-bugfix2",
+		"elm-format": "^0.8.1"
 	},
 	"scripts": {
 		"start": "webpack-dev-server"
