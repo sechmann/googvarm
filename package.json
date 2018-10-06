@@ -1,10 +1,11 @@
 {
 	"devDependencies": {
-		"css-loader": "^0.28.9",
-		"elm-webpack-loader": "^4.4.0",
+		"css-loader": "^1.0.0",
+		"elm-webpack-loader": "^5.0.0",
 		"purecss": "^1.0.0",
-		"webpack": "^3.11.0",
-		"webpack-dev-server": "^2.11.1"
+		"webpack": "^4.20.2",
+		"webpack-cli": "^3.1.2",
+		"webpack-dev-server": "^3.1.9"
 	},
 	"scripts": {
 		"start": "webpack-dev-server"

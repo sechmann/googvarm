@@ -8,7 +8,7 @@ module.exports = function(env) {
             filename: './dist/bundle.js'
         },
         module: {
-            loaders: [{
+            rules: [{
                 test: /\.elm$/,
                 exclude: [/elm-stuff/, /node_modules/],
                 use: {
