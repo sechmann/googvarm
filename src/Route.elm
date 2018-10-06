@@ -9,6 +9,7 @@ type Route
     = Home
     | Contact
     | Colors
+    | Editable
 
 
 route : Parser (Route -> a) a
@@ -16,6 +17,7 @@ route =
     oneOf
         [ Url.map Home (s "")
         , Url.map Contact (s "contact")
+        , Url.map Editable (s "editable")
         , Url.map Colors (s "colors")
         ]
 
@@ -28,6 +30,8 @@ routeToString page =
                 Home ->
                     []
 
+                Editable ->
+                    [ "editable" ]
                 Contact ->
                     [ "contact" ]
                 Colors ->

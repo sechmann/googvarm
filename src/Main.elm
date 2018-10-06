@@ -7,6 +7,7 @@ import Route exposing (Route)
 import Page.Home as Home
 import Page.Contact as Contact
 import Page.Colors as Colors
+import Page.Editable as Editable
 import Page.Errored as Errored exposing (PageLoadError)
 import Task exposing (Task)
 import Util exposing ((=>))
@@ -19,6 +20,7 @@ type Page
     | Errored PageLoadError
     | Home Home.Model
     | Contact Contact.Model
+    | Editable Editable.Model
     | Colors Colors.Model
 
 
@@ -79,6 +81,9 @@ setRoute maybeRoute model =
             Just Route.Colors ->
                 { model | pageState = Loaded (Colors Colors.init) } => Cmd.none
 
+            Just Route.Editable ->
+                {model | pageState = Loaded (Editable Editable.init)} => Cmd.none
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -130,6 +135,9 @@ viewPage isLoading page =
 
         Colors subModel ->
             Colors.view subModel
+        
+        Editable subModel ->
+            Editable.view subModel
 
 
 view : Model -> Html msg
