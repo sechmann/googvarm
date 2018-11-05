@@ -1,10 +1,10 @@
 module Views.Page exposing (ActivePage(..), frame)
 
-import Stylesheet exposing (stylesheet, Styles(..), NavigationStyles(..))
-import Route exposing (Route, href)
-import Html exposing (Html)
 import Element exposing (..)
 import Element.Attributes exposing (..)
+import Html exposing (Html)
+import Route exposing (Route, href)
+import Stylesheet exposing (NavigationStyles(..), Styles(..), stylesheet)
 
 
 type ActivePage
@@ -48,11 +48,11 @@ frame content =
                 [ center ]
                 (text "Footer")
     in
-        Element.viewport stylesheet <|
-            column NoStyle
-                [ center, width (percent 100), height (percent 100) ]
-                [ siteHeader
-                , siteNav
-                , column NoStyle [ center ] content
-                , siteFooter
-                ]
+    Element.viewport stylesheet <|
+        column NoStyle
+            [ center, width (percent 100), height (percent 100) ]
+            [ siteHeader
+            , siteNav
+            , column NoStyle [ center ] content
+            , siteFooter
+            ]

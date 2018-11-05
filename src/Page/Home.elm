@@ -1,9 +1,9 @@
 module Page.Home exposing (Model, init, update, view)
 
-import Stylesheet exposing (Styles(..))
-import Element exposing (column, row, text, link, image)
+import Element exposing (column, image, link, row, text)
 import Element.Attributes exposing (..)
 import Html exposing (Html)
+import Stylesheet exposing (Styles(..))
 import Views.Page exposing (frame)
 
 
@@ -39,7 +39,7 @@ img i =
     link ("/assets/" ++ i.src)
         (image NoStyle
             []
-            { src = ("assets/thumb." ++ i.src)
+            { src = "assets/thumb." ++ i.src
             , caption = i.caption
             }
         )

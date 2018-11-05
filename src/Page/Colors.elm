@@ -1,11 +1,11 @@
 module Page.Colors exposing (Model, init, update, view)
 
-import Element exposing (..)
-import Style exposing (styleSheet, style)
-import Views.Page exposing (frame)
 import Color
+import Element exposing (..)
 import Html exposing (Html)
+import Style exposing (style, styleSheet)
 import Stylesheet exposing (Styles(..))
+import Views.Page exposing (frame)
 
 
 type alias Model =
@@ -56,10 +56,10 @@ showColor t =
         ( colorName, color ) =
             t
     in
-        row
-            color
-            []
-            [ text colorName ]
+    row
+        color
+        []
+        [ text colorName ]
 
 
 view : Model -> Html msg

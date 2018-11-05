@@ -1,11 +1,10 @@
-module Stylesheet exposing (stylesheet, Styles(..), NavigationStyles(..), ProductStyles(..))
+module Stylesheet exposing (NavigationStyles(..), ProductStyles(..), Styles(..), stylesheet)
 
 import Color exposing (..)
-import Style.Color
 import Style exposing (..)
-import Style.Font as Font
-import Style.Color as Color
 import Style.Border as Border
+import Style.Color as Color
+import Style.Font as Font
 import Style.Shadow as Shadow
 
 

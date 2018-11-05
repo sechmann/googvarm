@@ -1,10 +1,10 @@
 module Page.Errored exposing (PageLoadError, pageLoadError, view)
 
-import Html exposing (Html)
-import Views.Page exposing (ActivePage)
-import Stylesheet exposing (stylesheet, Styles(..))
 import Element exposing (..)
 import Element.Attributes exposing (..)
+import Html exposing (Html)
+import Stylesheet exposing (Styles(..), stylesheet)
+import Views.Page exposing (ActivePage)
 
 
 type PageLoadError

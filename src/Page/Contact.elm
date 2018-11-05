@@ -5,6 +5,7 @@ import Element.Attributes exposing (..)
 import Html exposing (Html)
 import Views.Page exposing (frame)
 
+
 type alias Model =
     { post : String }
 

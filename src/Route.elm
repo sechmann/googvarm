@@ -1,48 +1,23 @@
 module Route exposing (Route(..), fromLocation, href, modifyUrl)
 
-import UrlParser as Url exposing ((</>), Parser, oneOf, parseHash, s, string)
 import Element exposing (link)
-import Navigation exposing (Location)
+import Url.Parser exposing (Parser, (</>), int, map, oneOf, s, string)
 
 
 type Route
-    = Home
-    | Contact
-    | Colors
-    | Editable
-
-
-route : Parser (Route -> a) a
-route =
-    oneOf
-        [ Url.map Home (s "")
-        , Url.map Contact (s "contact")
-        , Url.map Editable (s "editable")
-        , Url.map Colors (s "colors")
-        ]
-
-
-routeToString : Route -> String
-routeToString page =
-    let
-        pieces =
-            case page of
-                Home ->
-                    []
-
-                Editable ->
-                    [ "editable" ]
-                Contact ->
-                    [ "contact" ]
-                Colors ->
-                    [ "Colors" ]
-    in
-        "#/" ++ String.join "/" pieces
+    = Page String
+    | ProductList Int
+    | Product Int
 
 
 
--- Public helpers --
-
+routeParser : Parser (Route -> a) a
+routeParser =
+  oneOf
+    [ map Topic   (s "page" </> string)
+    , map Blog    (s "product" </> int)
+    , map Blog    (s "productList" </> int)
+    ]
 
 href :
     Route
@@ -61,5 +36,6 @@ fromLocation : Location -> Maybe Route
 fromLocation location =
     if String.isEmpty location.hash then
         Just Home
+
     else
         parseHash route location
