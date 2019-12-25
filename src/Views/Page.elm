@@ -1,58 +1,42 @@
-module Views.Page exposing (ActivePage(..), frame)
+module Views.Page exposing (Page(..), view)
 
+import Browser exposing (Document)
 import Element exposing (..)
-import Element.Attributes exposing (..)
+import Element.Region as Region
 import Html exposing (Html)
 import Route exposing (Route, href)
-import Stylesheet exposing (NavigationStyles(..), Styles(..), stylesheet)
+import Stylesheet exposing (color)
+import Viewer exposing (Viewer)
+import Views.Navigation exposing (navigation)
 
 
-type ActivePage
+type Page
     = Home
     | Courses
     | Contact
+    | NotImplemented
 
 
-navlink route alt =
-    href route (el (Nav Link) [ paddingXY 6 12 ] (text alt))
-
-
-frame : List (Element Styles variation msg) -> Html msg
-frame content =
+view : Maybe Viewer -> Page -> { title : String, content : List (Element msg) } -> Document msg
+view maybeViewer page { title, content } =
     let
         siteHeader =
-            header NoStyle
-                []
-                (image NoStyle [ center ] { src = "assets/logo.svg", caption = "Go og varm" })
+            image [] { src = "assets/logo.svg", description = "Go og varm" }
 
         siteNav =
-            navigation Navbar
-                []
-                { name = "Main navigation"
-                , options =
-                    [ navlink Route.Home "Hjem"
-                    , navlink Route.Home "Saueskinn"
-                    , navlink Route.Home "Skinnprodukter"
-                    , navlink Route.Home "Ull til toving"
-                    , navlink Route.Home "Alpakkagarn"
-                    , navlink Route.Home "Ullgarn"
-                    , navlink Route.Home "Ullundertøy"
-                    , navlink Route.Home "Kurs"
-                    , navlink Route.Contact "Kontakt"
-                    , navlink Route.Colors "Colors"
-                    ]
-                }
+            navigation
 
         siteFooter =
-            footer NoStyle
-                [ center ]
-                (text "Footer")
+            text "Footer"
     in
-    Element.viewport stylesheet <|
-        column NoStyle
-            [ center, width (percent 100), height (percent 100) ]
-            [ siteHeader
-            , siteNav
-            , column NoStyle [ center ] content
-            , siteFooter
-            ]
+    { title = title ++ " - Go' og varm"
+    , body =
+        [ Element.layout []
+            (column []
+                [ row [ Region.heading 1 ] [ siteHeader ]
+                , row [ Region.navigation ] [ siteNav ]
+                , row [ Region.footer ] [ siteFooter ]
+                ]
+            )
+        ]
+    }

@@ -1,20 +1,21 @@
-module Page.Home exposing (Model, init, update, view)
+module Page.Home exposing (Model, init, toSession, update, view)
 
-import Element exposing (column, image, link, row, text)
-import Element.Attributes exposing (..)
+import Browser exposing (Document)
+import Element exposing (Element, column, image, link, row, text)
 import Html exposing (Html)
-import Stylesheet exposing (Styles(..))
-import Views.Page exposing (frame)
+import Session exposing (Session)
+import Stylesheet exposing (color)
 
 
 type alias Model =
     { images : List { src : String, caption : String }
     , post : String
+    , session : Session
     }
 
 
-init : Model
-init =
+init : Session -> Model
+init session =
     { images =
         [ { src = "front1.jpg", caption = "" }
         , { src = "front2.jpg", caption = "" }
@@ -26,6 +27,7 @@ init =
 Her selges norske saueskinn og skinnfeller, ull og silke til toving, filting og spinning, alpakkagarn fra Du Store Alpakka, ullgarn fra bl.a. Leine Merino, Askeladden og Hillesvåg, mønster, knapper, ulltøy, ullsåler og mye annet rart!
 
 På hjemmesiden vises bare et lite utvalg. Skinnfeller sys på bestilling. Åpent tirsdag og torsdag kl. 10.00-20.00."""
+    , session = session
     }
 
 
@@ -34,22 +36,27 @@ update model post =
     { model | post = post }
 
 
-img : { src : String, caption : String } -> Element.Element Styles variation msg
+img : { src : String, caption : String } -> Element msg
 img i =
-    link ("/assets/" ++ i.src)
-        (image NoStyle
-            []
-            { src = "assets/thumb." ++ i.src
-            , caption = i.caption
-            }
+    link []
+        { url = "/assets/" ++ i.src
+        , label =
+            image
+                []
+                { src = "assets/thumb." ++ i.src
+                , description = i.caption
+                }
+        }
+
+
+view : Model -> Element msg
+view model =
+    row []
+        (List.map img model.images
+            ++ [ text model.post ]
         )
 
 
-view : Model -> Html msg
-view model =
-    [ row NoStyle
-        []
-        (List.map img model.images)
-    , text model.post
-    ]
-        |> frame
+toSession : Model -> Session
+toSession model =
+    model.session
