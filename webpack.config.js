@@ -13,7 +13,7 @@ module.exports = function(env) {
                 exclude: [/elm-stuff/, /node_modules/],
                 use: {
                     loader: 'elm-webpack-loader',
-                    options: {debug: true, warn: true}
+                    options: {debug: true }
                 }
             }]
         }
