@@ -1,4 +1,4 @@
-port module Api exposing (Cred, application)
+port module Api exposing (Cred, application, storeCredWith, viewerChanges)
 
 import Browser
 import Browser.Navigation as Nav
@@ -64,9 +64,6 @@ credDecoder =
         |> required "token" Decode.string
 
 
-port onStoreChange : (Value -> msg) -> Sub msg
-
-
 viewerChanges : (Maybe viewer -> msg) -> Decoder (Cred -> viewer) -> Sub msg
 viewerChanges toMsg decoder =
     onStoreChange (\value -> toMsg (decodeFromChange decoder value))
@@ -103,3 +100,6 @@ logout =
 
 
 port storeCache : Maybe Value -> Cmd msg
+
+
+port onStoreChange : (Value -> msg) -> Sub msg

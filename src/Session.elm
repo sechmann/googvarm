@@ -44,7 +44,7 @@ navKey session =
 
 changes : (Session -> msg) -> Nav.Key -> Sub msg
 changes toMsg key =
-    Sub.none
+    Api.viewerChanges (\maybeViewer -> toMsg (fromViewer key maybeViewer)) Viewer.decoder
 
 
 fromViewer : Nav.Key -> Maybe Viewer -> Session
