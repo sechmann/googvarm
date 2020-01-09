@@ -105,7 +105,7 @@ view model =
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
 
         Home homeModel ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
+            viewPage Page.NotImplemented (\_ -> Ignored) { title = "Hjem", content = [ Home.view homeModel ] }
 
         Generic genericModel ->
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view

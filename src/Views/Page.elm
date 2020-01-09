@@ -14,6 +14,7 @@ type Page
     = Home
     | Courses
     | Contact
+    | Blog
     | NotImplemented
 
 
@@ -35,8 +36,28 @@ view maybeViewer page { title, content } =
             (column []
                 [ row [ Region.heading 1 ] [ siteHeader ]
                 , row [ Region.navigation ] [ siteNav ]
+                , row [ Region.mainContent ] content
                 , row [ Region.footer ] [ siteFooter ]
                 ]
             )
         ]
     }
+
+
+pageToTitle : Page -> String
+pageToTitle page =
+    case page of
+        Home ->
+            "Hjem"
+
+        Courses ->
+            "Kurs"
+
+        Contact ->
+            "Kontakt"
+
+        NotImplemented ->
+            "Ikke implementert"
+
+        Blog ->
+            "Blog"
