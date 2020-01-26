@@ -52,6 +52,6 @@ navigation =
         , navLink Route.Home "Ullgarn"
         , navLink Route.Home "Ullundertøy"
         , navLink Route.Home "Kurs"
-        , navLink (Route.ProductList "skinn") "Kurs"
+        , navLink (Route.ProductList "skinn") "Skinn"
         , navLink (Route.Generic "kontakt") "Kontakt"
         ]

@@ -6,5 +6,5 @@ import Element exposing (Element)
 view : { title : String, content : List (Element a) }
 view =
     { title = "blank"
-    , content = [ Element.text "" ]
+    , content = [ Element.text "asd" ]
     }

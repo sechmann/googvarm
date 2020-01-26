@@ -35,6 +35,8 @@ type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
     | Ignored
+    | GotHomeMsg Home.Msg
+    | GotGenericMsg Generic.Msg
 
 
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -48,7 +50,10 @@ changeRouteTo maybeRoute model =
             ( NotFound session, Cmd.none )
 
         Just Route.Home ->
-            ( model, Route.replaceUrl (Session.navKey session) Route.Home )
+            Home.init session |> updateWith Home GotHomeMsg model
+
+        Just Route.Contact ->
+            Generic.init session |> updateWith Generic GotGenericMsg model
 
         Just (Route.Generic page) ->
             ( model, Route.replaceUrl (Session.navKey session) (Route.Generic page) )
@@ -60,10 +65,17 @@ changeRouteTo maybeRoute model =
             ( model, Route.replaceUrl (Session.navKey session) (Route.Product id) )
 
 
+updateWith : (subModel -> Model) -> (subMsg -> Msg) -> Model -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
+updateWith toModel toMsg model ( subModel, subCmd ) =
+    ( toModel subModel
+    , Cmd.map toMsg subCmd
+    )
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        LinkClicked urlRequest ->
+    case ( msg, model ) of
+        ( LinkClicked urlRequest, _ ) ->
             case urlRequest of
                 Browser.Internal url ->
                     ( model, Nav.pushUrl (navKey (toSession model)) (Url.toString url) )
@@ -71,15 +83,21 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        UrlChanged url ->
+        ( UrlChanged url, _ ) ->
+            changeRouteTo (Route.fromUrl url) model
+
+        ( Ignored, _ ) ->
             ( model
             , Cmd.none
             )
 
-        Ignored ->
-            ( model
-            , Cmd.none
-            )
+        ( GotHomeMsg subMsg, Home homeModel ) ->
+            Home.update subMsg homeModel
+                |> updateWith Home GotHomeMsg model
+
+        ( _, _ ) ->
+            -- Disregard messages that arrived for the wrong page.
+            ( model, Cmd.none )
 
 
 view : Model -> Document Msg
@@ -105,7 +123,7 @@ view model =
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
 
         Home homeModel ->
-            viewPage Page.NotImplemented (\_ -> Ignored) { title = "Hjem", content = [ Home.view homeModel ] }
+            viewPage Page.Home GotHomeMsg (Home.view homeModel)
 
         Generic genericModel ->
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view

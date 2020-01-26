@@ -6,11 +6,12 @@ import Html exposing (Attribute)
 import Html.Attributes as Attr
 import String exposing (fromInt)
 import Url exposing (Url)
-import Url.Parser exposing ((</>), Parser, int, map, oneOf, s, string)
+import Url.Parser as Parser exposing ((</>), Parser, map, oneOf, s, string, top)
 
 
 type Route
     = Home
+    | Contact
     | Generic String
     | ProductList String
     | Product String
@@ -19,10 +20,11 @@ type Route
 parser : Parser (Route -> a) a
 parser =
     oneOf
-        [ map Home Url.Parser.top
-        , map Generic (s "page" </> string)
-        , map Product (s "product" </> string)
-        , map ProductList (s "productList" </> string)
+        [ Parser.map Home Parser.top
+        , Parser.map Generic (s "page" </> string)
+        , Parser.map Contact (s "contact")
+        , Parser.map Product (s "product" </> string)
+        , Parser.map ProductList (s "productList" </> string)
         ]
 
 
@@ -49,7 +51,7 @@ fromUrl url =
     -- This makes it *literally* the path, so we can proceed
     -- with parsing as if it had been a normal path all along.
     { url | path = Maybe.withDefault "" url.fragment, fragment = Nothing }
-        |> Url.Parser.parse parser
+        |> Parser.parse parser
 
 
 
@@ -72,5 +74,8 @@ routeToString page =
 
                 ProductList category ->
                     [ "productlist", category ]
+
+                Contact ->
+                    [ "contact" ]
     in
     "#/" ++ String.join "/" pieces
