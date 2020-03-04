@@ -14,6 +14,7 @@ type Page
     = Home
     | Courses
     | Contact
+    | Generic
     | Blog
     | NotImplemented
 
@@ -61,3 +62,6 @@ pageToTitle page =
 
         Blog ->
             "Blog"
+
+        Generic ->
+            "Generic"

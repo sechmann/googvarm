@@ -29,9 +29,13 @@ update model content =
     { model | content = content }
 
 
-view : Model -> Element msg
+view : Model -> { title : String, content : List (Element msg) }
 view model =
-    text model.content
+    { title = ""
+    , content =
+        [ text model.content
+        ]
+    }
 
 
 toSession : Model -> Session

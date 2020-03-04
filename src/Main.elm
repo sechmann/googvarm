@@ -42,6 +42,9 @@ type Msg
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
 changeRouteTo maybeRoute model =
     let
+        _ =
+            Debug.log "hei" maybeRoute
+
         session =
             toSession model
     in
@@ -126,7 +129,7 @@ view model =
             viewPage Page.Home GotHomeMsg (Home.view homeModel)
 
         Generic genericModel ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
+            viewPage Page.Generic (\_ -> Ignored) (Generic.view genericModel)
 
         Editable editableModel ->
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view

@@ -1,4 +1,4 @@
-module Route exposing (Route(..), fromUrl, href, replaceUrl)
+module Route exposing (Route(..), fromUrl, href, parser, replaceUrl)
 
 import Browser.Navigation as Nav
 import Element exposing (Element, link, text)
@@ -21,10 +21,11 @@ parser : Parser (Route -> a) a
 parser =
     oneOf
         [ Parser.map Home Parser.top
+        , Parser.map Home (s "home")
         , Parser.map Generic (s "page" </> string)
         , Parser.map Contact (s "contact")
         , Parser.map Product (s "product" </> string)
-        , Parser.map ProductList (s "productList" </> string)
+        , Parser.map ProductList (s "products" </> string)
         ]
 
 
