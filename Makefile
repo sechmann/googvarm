@@ -1,6 +1,5 @@
-build:
-	mkdir -p run
-	elm make src/Main.elm --output=run/elm.js --debug
+all:
+	npm run build
 
 test:
 	elm-test

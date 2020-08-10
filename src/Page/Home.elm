@@ -51,7 +51,7 @@ img i =
         , label =
             image
                 []
-                { src = "assets/thumb." ++ i.src
+                { src = "/assets/thumb." ++ i.src
                 , description = i.caption
                 }
         }
