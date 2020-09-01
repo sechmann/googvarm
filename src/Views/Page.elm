@@ -2,10 +2,10 @@ module Views.Page exposing (Page(..), view)
 
 import Browser exposing (Document)
 import Element exposing (..)
+import Element.Background
+import Element.Font as Font
 import Element.Region as Region
-import Html exposing (Html)
-import Route exposing (Route, href)
-import Stylesheet exposing (color)
+import Stylesheet exposing (Color(..), color)
 import Viewer exposing (Viewer)
 import Views.Navigation exposing (navigation)
 
@@ -23,7 +23,16 @@ view : Maybe Viewer -> Page -> { title : String, content : List (Element msg) } 
 view maybeViewer page { title, content } =
     let
         siteHeader =
-            image [] { src = "assets/logo.svg", description = "Go og varm" }
+            column [ width fill ]
+                [ row [ width fill, padding 3, spacing 20, alignLeft, Element.Background.color (color LightGray), Font.color (color Gray) ]
+                    [ text "92 62 12 97"
+                    , text "TIR/TOR 10:00-20:00"
+                    , link [ alignRight ] { url = "https://vg.no", label = text "Ulvedalsveien 150, 2020 Skedsmokorset" }
+                    ]
+                , row [ width fill, padding 30 ]
+                    [ image [ centerX ] { src = "assets/logo.svg", description = "Go og varm" }
+                    ]
+                ]
 
         siteNav =
             navigation
@@ -33,12 +42,13 @@ view maybeViewer page { title, content } =
     in
     { title = title ++ " - Go' og varm"
     , body =
-        [ Element.layout []
-            (column []
-                [ row [ Region.heading 1 ] [ siteHeader ]
-                , row [ Region.navigation ] [ siteNav ]
-                , row [ Region.mainContent ] content
-                , row [ Region.footer ] [ siteFooter ]
+        [ Element.layout [ width fill ]
+            -- (column [ Element.explain Debug.todo, width fill ]
+            (column [ width fill ]
+                [ row [ width fill, Region.heading 1 ] [ siteHeader ]
+                , row [ width fill, Region.navigation ] siteNav
+                , row [ width fill, Region.mainContent ] [ column [ width fill ] content ]
+                , row [ width fill, Region.footer ] [ siteFooter ]
                 ]
             )
         ]

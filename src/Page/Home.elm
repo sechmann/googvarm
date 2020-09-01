@@ -1,10 +1,9 @@
 module Page.Home exposing (Model, Msg, init, toSession, update, view)
 
-import Browser exposing (Document)
-import Element exposing (Element, column, image, link, row, text)
-import Html exposing (Html)
+import Element exposing (Element, alignLeft, centerX, centerY, column, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
+import Element.Font exposing (center)
 import Session exposing (Session)
-import Stylesheet exposing (color)
+import String
 
 
 type Msg
@@ -61,10 +60,15 @@ view : Model -> { title : String, content : List (Element msg) }
 view model =
     { title = "Hjem"
     , content =
-        [ row []
-            (List.map img model.images
-                ++ [ text model.post ]
-            )
+        [ row [ width fill, padding 10, spacing 10, centerY, center ] (List.map img model.images)
+        , row [ width fill ]
+            [ textColumn [ center, centerY, width fill ]
+                [ paragraph []
+                    [ el [ alignLeft, padding 5 ]
+                        (text model.post)
+                    ]
+                ]
+            ]
         ]
     }
 

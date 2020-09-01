@@ -1,12 +1,10 @@
 module Route exposing (Route(..), fromUrl, href, parser, replaceUrl)
 
 import Browser.Navigation as Nav
-import Element exposing (Element, link, text)
-import Html exposing (Attribute)
-import Html.Attributes as Attr
-import String exposing (fromInt)
+import Element exposing (Element, link)
+import String
 import Url exposing (Url)
-import Url.Parser as Parser exposing ((</>), Parser, map, oneOf, s, string, top)
+import Url.Parser as Parser exposing ((</>), Parser, oneOf, s, string)
 
 
 type Route
