@@ -1,9 +1,11 @@
 module Page.Home exposing (Model, Msg, init, toSession, update, view)
 
-import Element exposing (Element, alignLeft, centerX, centerY, column, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
+import Element exposing (Element, alignLeft, centerX, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
+import Element.Border exposing (shadow)
 import Element.Font exposing (center)
 import Session exposing (Session)
 import String
+import Stylesheet exposing (Color(..), color)
 
 
 type Msg
@@ -45,7 +47,7 @@ update msg model =
 
 img : { src : String, caption : String } -> Element msg
 img i =
-    link []
+    link [ centerX, shadow { offset = ( 2.0, 2.0 ), size = 1, blur = 15.0, color = color Gray } ]
         { url = "/assets/" ++ i.src
         , label =
             image
@@ -60,9 +62,9 @@ view : Model -> { title : String, content : List (Element msg) }
 view model =
     { title = "Hjem"
     , content =
-        [ row [ width fill, padding 10, spacing 10, centerY, center ] (List.map img model.images)
+        [ row [ width fill, padding 10, spacing 10, center ] (List.map img model.images)
         , row [ width fill ]
-            [ textColumn [ center, centerY, width fill ]
+            [ textColumn [ center, width fill ]
                 [ paragraph []
                     [ el [ alignLeft, padding 5 ]
                         (text model.post)

@@ -58,7 +58,7 @@ view maybeViewer page { title, content } =
             (column [ width fill ]
                 [ row [ width fill, Region.heading 1 ] [ siteHeader ]
                 , row [ width fill, Region.navigation ] siteNav
-                , row [ width fill, Region.mainContent ] [ column [ width fill ] content ]
+                , row [ width fill, Region.mainContent ] [ column [ width fill, paddingXY 150 20 ] content ]
                 , row [ width fill, Region.footer ] [ siteFooter ]
                 ]
             )
