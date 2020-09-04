@@ -3,6 +3,7 @@ module Views.Page exposing (Page(..), view)
 import Browser exposing (Document)
 import Element exposing (..)
 import Element.Background
+import Element.Border
 import Element.Font as Font
 import Element.Region as Region
 import Stylesheet exposing (Color(..), color)
@@ -24,7 +25,17 @@ view maybeViewer page { title, content } =
     let
         siteHeader =
             column [ width fill ]
-                [ row [ width fill, padding 3, spacing 20, alignLeft, Element.Background.color (color LightGray), Font.color (color Gray) ]
+                [ row
+                    [ width fill
+                    , padding 10
+                    , Font.size 12
+                    , spacing 20
+                    , alignLeft
+                    , Element.Background.color (color LightGray)
+                    , Font.color (color Gray)
+                    , Element.Border.widthEach { bottom = 1, left = 0, right = 0, top = 0 }
+                    , Element.Border.solid
+                    ]
                     [ text "92 62 12 97"
                     , text "TIR/TOR 10:00-20:00"
                     , link [ alignRight ] { url = "https://vg.no", label = text "Ulvedalsveien 150, 2020 Skedsmokorset" }
