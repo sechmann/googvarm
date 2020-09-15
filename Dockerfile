@@ -4,17 +4,17 @@ WORKDIR /home/node/app
 COPY ./package* ./
 RUN npm install
 
-COPY ./ ./
-RUN npm run build && npm test
+COPY ./src/ ./src/
+COPY ./tests/ ./tests/
+COPY ./assets/ ./assets/
+COPY ./elm.json ./
+COPY ./index.html ./
 
-FROM node:10-alpine
-ENV NODE_ENV=production
-WORKDIR /home/node/app
+RUN npm test
+RUN npm run build
 
-COPY ./package* ./
+FROM nginx
 
-COPY --from=builder /home/node/app/node_modules/ ./node_modules/
-COPY --from=builder /home/node/app/build/ ./build/
+COPY --from=builder /home/node/app/dist /usr/share/nginx/html
 
-USER node
-CMD npm start
+#USER www-data
