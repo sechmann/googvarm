@@ -13,7 +13,11 @@ jobs:
 
       - name: build
         run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com --username x-access-token --password-stdin
           docker build -t docker.pkg.github.com/vegarn/googvarm:${GITHUB_SHA:0:8} .
+
+      - name: push
+        run: |
           docker push docker.pkg.github.com/vegarn/googvarm:${GITHUB_SHA:0:8}
 
   deploy:
