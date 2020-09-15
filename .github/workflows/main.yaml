@@ -13,7 +13,7 @@ jobs:
 
       - name: build
         run: |
-          docker build -t docker.pkg.github.com/vegarn/googvarm:${GITHUB_SHA:0:8}
+          docker build -t docker.pkg.github.com/vegarn/googvarm:${GITHUB_SHA:0:8} .
           docker push docker.pkg.github.com/vegarn/googvarm:${GITHUB_SHA:0:8}
 
   deploy:
