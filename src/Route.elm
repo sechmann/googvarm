@@ -72,7 +72,7 @@ routeToString page =
                     [ "product", name ]
 
                 ProductList category ->
-                    [ "productlist", category ]
+                    [ "products", category ]
 
                 Contact ->
                     [ "contact" ]

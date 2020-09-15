@@ -2,7 +2,7 @@ module Page.Home exposing (Model, Msg, init, toSession, update, view)
 
 import Element exposing (Element, alignLeft, centerX, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
 import Element.Border exposing (shadow)
-import Element.Font exposing (center)
+import Element.Font as Font
 import Session exposing (Session)
 import String
 import Stylesheet exposing (Color(..), color)
@@ -62,9 +62,9 @@ view : Model -> { title : String, content : List (Element msg) }
 view model =
     { title = "Hjem"
     , content =
-        [ row [ width fill, padding 10, spacing 10, center ] (List.map img model.images)
-        , row [ width fill ]
-            [ textColumn [ center, width fill ]
+        [ row [ width fill, padding 10, spacing 10, Font.center ] (List.map img model.images)
+        , row [ width fill, padding 10 ]
+            [ textColumn [ Font.center, width fill, Font.family [ Font.typeface "Helvetica", Font.sansSerif ] ]
                 [ paragraph []
                     [ el [ alignLeft, padding 5 ]
                         (text model.post)

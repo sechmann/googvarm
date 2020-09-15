@@ -4,11 +4,12 @@ import Api
 import Browser exposing (Document)
 import Browser.Navigation as Nav
 import Html exposing (Html)
-import Json.Decode as Decode exposing (Value)
+import Json.Decode exposing (Value)
 import Page.Blank as Blank exposing (view)
 import Page.Editable as Editable exposing (toSession)
 import Page.Generic as Generic exposing (toSession)
 import Page.Home as Home exposing (toSession)
+import Page.ProductList as ProductList
 import Route exposing (Route(..))
 import Session exposing (Session, navKey)
 import Url exposing (Url)
@@ -23,6 +24,7 @@ type Model
     | Home Home.Model
     | Generic Generic.Model
     | Editable Editable.Model
+    | ProductList String ProductList.Model
 
 
 init : Maybe Viewer -> Url -> Nav.Key -> ( Model, Cmd Msg )
@@ -62,7 +64,7 @@ changeRouteTo maybeRoute model =
             ( model, Route.replaceUrl (Session.navKey session) (Route.Generic page) )
 
         Just (Route.ProductList category) ->
-            ( model, Route.replaceUrl (Session.navKey session) (Route.ProductList category) )
+            ProductList.init session category |> updateWith (ProductList category) (\_ -> Ignored) model
 
         Just (Route.Product id) ->
             ( model, Route.replaceUrl (Session.navKey session) (Route.Product id) )
@@ -134,6 +136,9 @@ view model =
         Editable editableModel ->
             viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
 
+        ProductList category productListModel ->
+            viewPage Page.ProductList (\_ -> Ignored) (ProductList.view productListModel)
+
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
@@ -169,6 +174,9 @@ toSession page =
 
         Editable model ->
             Editable.toSession model
+
+        ProductList _ model ->
+            ProductList.toSession model
 
         _ ->
             Debug.todo "asd"

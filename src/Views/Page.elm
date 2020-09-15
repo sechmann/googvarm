@@ -18,6 +18,7 @@ type Page
     | Generic
     | Blog
     | NotImplemented
+    | ProductList
 
 
 view : Maybe Viewer -> Page -> { title : String, content : List (Element msg) } -> Document msg
@@ -49,7 +50,7 @@ view maybeViewer page { title, content } =
             navigation
 
         siteFooter =
-            text "Footer"
+            row [ centerX, alignBottom ] [ text "Footer" ]
     in
     { title = title ++ " - Go' og varm"
     , body =
@@ -86,3 +87,6 @@ pageToTitle page =
 
         Generic ->
             "Generic"
+
+        ProductList ->
+            "ProductListTitleFromPage"

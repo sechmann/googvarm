@@ -34,12 +34,12 @@ navLink route label =
 navigation : List (Element nsg)
 navigation =
     [ navLink Route.Home "Hjem"
-    , navLink Route.Home "Saueskinn"
-    , navLink Route.Home "Skinnprodukter"
-    , navLink Route.Home "Ull til toving"
-    , navLink Route.Home "Alpakkagarn"
-    , navLink Route.Home "Ullgarn"
-    , navLink Route.Home "Ullundertøy"
+    , navLink (Route.ProductList "saueskinn") "Saueskinn"
+    , navLink (Route.ProductList "skinnprodukter") "Skinnprodukter"
+    , navLink (Route.ProductList "toving") "Ull til toving"
+    , navLink (Route.ProductList "alpakkagarn") "Alpakkagarn"
+    , navLink (Route.ProductList "ullgarn") "Ullgarn"
+    , navLink (Route.ProductList "ullundertøy") "Ullundertøy"
     , navLink Route.Home "Kurs"
     , navLink (Route.ProductList "skinn") "Skinn"
     , navLink Route.Contact "Kontakt"
