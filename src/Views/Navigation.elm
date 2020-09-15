@@ -9,7 +9,7 @@ import Stylesheet exposing (Color(..), color)
 
 navButtonStyle : List (Element.Attribute msg)
 navButtonStyle =
-    [ centerX, Element.paddingXY 6 12 ]
+    [ centerX, Element.paddingXY 12 12 ]
 
 
 navLinkStyle : List (Element.Attribute msg)
