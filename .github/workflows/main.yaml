@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          docker build -t docker.pkg.github.com/VegarM/googvarm:${GITHUB_SHA:0:5}
+          docker push docker.pkg.github.com/VegarM/googvarm:${GITHUB_SHA:0:5}
+
+  deploy:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: deploy
+        run: |
+          echo deploy
+
