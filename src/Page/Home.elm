@@ -1,6 +1,6 @@
 module Page.Home exposing (Model, Msg, init, toSession, update, view)
 
-import Element exposing (Element, alignLeft, centerX, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
+import Element exposing (Element, centerX, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
 import Element.Border exposing (shadow)
 import Element.Font as Font
 import Session exposing (Session)
@@ -62,11 +62,11 @@ view : Model -> { title : String, content : List (Element msg) }
 view model =
     { title = "Hjem"
     , content =
-        [ row [ width fill, padding 10, spacing 10, Font.center ] (List.map img model.images)
+        [ row [ width fill, padding 10, spacing 10 ] (List.map img model.images)
         , row [ width fill, padding 10 ]
-            [ textColumn [ Font.center, width fill, Font.family [ Font.typeface "Helvetica", Font.sansSerif ] ]
+            [ textColumn [ centerX, Font.size 16, Font.center ]
                 [ paragraph []
-                    [ el [ alignLeft, padding 5 ]
+                    [ el [ padding 5 ]
                         (text model.post)
                     ]
                 ]
