@@ -3,11 +3,10 @@
   "repository": "Sechmann/googvarm",
   "license": "MIT",
   "devDependencies": {
-    "css-loader": "^3.6.0",
+    "css-loader": "^5.2.0",
     "elm": "^0.19.1-5",
     "elm-format": "^0.8.5",
-    "elm-test": "^0.19.1-revision6",
-    "elm-live": "^4.0.2"
-  },
-  "dependencies": {}
+    "elm-live": "^4.0.2",
+    "elm-test": "^0.19.1-revision6"
+  }
 }
