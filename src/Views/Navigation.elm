@@ -40,7 +40,7 @@ navigation =
     , navLink (Route.ProductList "alpakkagarn") "Alpakkagarn"
     , navLink (Route.ProductList "ullgarn") "Ullgarn"
     , navLink (Route.ProductList "ullundertøy") "Ullundertøy"
-    , navLink Route.Home "Kurs"
     , navLink (Route.ProductList "skinn") "Skinn"
+    , navLink Route.Home "Kurs"
     , navLink Route.Contact "Kontakt"
     ]
