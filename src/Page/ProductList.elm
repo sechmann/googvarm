@@ -14,14 +14,9 @@ type alias Model =
     }
 
 
-init : Session -> String -> ( Model, Cmd msg )
-init session category =
-    ( { products =
-            [ { name = "Sengefell"
-              , price = "7000,- pr kvm + tekstil"
-              , description = "Fell til enkeltseng. Du kan velge pelsfarge (rase) og om du vil ha åkle eller trykk på fellen. Størrelse ca 1x1,8 meter. Syr også til dobbeltseng. Ring for bestilling! Syr gjerne til gamle åkler også."
-              }
-            ]
+init : Session -> List Product -> String -> ( Model, Cmd msg )
+init session products category =
+    ( { products = products
       , session = session
       , category = category
       , test = 0

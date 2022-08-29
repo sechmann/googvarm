@@ -10,6 +10,7 @@ import Page.Editable as Editable exposing (toSession)
 import Page.Generic as Generic exposing (toSession)
 import Page.Home as Home exposing (toSession)
 import Page.ProductList as ProductList
+import ProductCategory exposing (filterCategory)
 import Route exposing (Route(..))
 import Session exposing (Session, navKey)
 import Url exposing (Url)
@@ -49,6 +50,65 @@ changeRouteTo maybeRoute model =
 
         session =
             toSession model
+
+        initialCategories =
+            [ { name = "skinnprodukter"
+              , products =
+                    [ { name = "Sengefell"
+                      , price = "7000,- pr kvm + tekstil"
+                      , description = "Fell til enkeltseng. Du kan velge pelsfarge (rase) og om du vil ha åkle eller trykk på fellen. Størrelse ca 1x1,8 meter. Syr også til dobbeltseng. Ring for bestilling! Syr gjerne til gamle åkler også."
+                      }
+                    ]
+              }
+            , { name = "saueskinn"
+              , products =
+                    [ { name = "Saueskinn"
+                      , price = "2000,- pr stk"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    ]
+              }
+            , { name = "toving"
+              , products =
+                    [ { name = "Ull"
+                      , price = "200,-"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    ]
+              }
+            , { name = "alpakkagarn"
+              , products =
+                    [ { name = "Alpakkagarn 1"
+                      , price = "10,- pr g"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    , { name = "Alpakkagarn 2"
+                      , price = "12,- pr g"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    ]
+              }
+            , { name = "ullundertøy"
+              , products =
+                    [ { name = "Bokser"
+                      , price = "400,-"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    , { name = "Sokker"
+                      , price = "400,- pr par"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    ]
+              }
+            , { name = "skinn"
+              , products =
+                    [ { name = "Kuskinn"
+                      , price = "3000,-"
+                      , description = "Lorem Ipsum etc mer tekst kan komme her"
+                      }
+                    ]
+              }
+            ]
     in
     case maybeRoute of
         Nothing ->
@@ -64,7 +124,7 @@ changeRouteTo maybeRoute model =
             ( model, Route.replaceUrl (Session.navKey session) (Route.Generic page) )
 
         Just (Route.ProductList category) ->
-            ProductList.init session category |> updateWith (ProductList category) (\_ -> Ignored) model
+            ProductList.init session (filterCategory category initialCategories) category |> updateWith (ProductList category) (\_ -> Ignored) model
 
         Just (Route.Product id) ->
             ( model, Route.replaceUrl (Session.navKey session) (Route.Product id) )
