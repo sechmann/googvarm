@@ -123,8 +123,16 @@ changeRouteTo maybeRoute model =
         Just (Route.Generic page) ->
             ( model, Route.replaceUrl (Session.navKey session) (Route.Generic page) )
 
-        Just (Route.ProductList category) ->
-            ProductList.init session (filterCategory category initialCategories) category |> updateWith (ProductList category) (\_ -> Ignored) model
+        Just (Route.ProductList c) ->
+            let
+                category =
+                    Maybe.withDefault c (Url.percentDecode c)
+            in
+            ProductList.init
+                session
+                (filterCategory category initialCategories)
+                category
+                |> updateWith (ProductList category) (\_ -> Ignored) model
 
         Just (Route.Product id) ->
             ( model, Route.replaceUrl (Session.navKey session) (Route.Product id) )
