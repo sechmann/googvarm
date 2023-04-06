@@ -1,9 +1,7 @@
-module Page.Editable exposing (Model, init, toSession, update, view)
+module Page.Editable exposing (Model, init, update, view)
 
-import Browser exposing (Document)
-import Dict exposing (Dict, empty, get)
+import Dict exposing (Dict, get)
 import Element exposing (..)
-import Html exposing (Html)
 import Session exposing (Session)
 
 
@@ -38,8 +36,3 @@ update model state =
 view : Model -> Element msg
 view model =
     editableText model.state "post"
-
-
-toSession : Model -> Session
-toSession model =
-    model.session

@@ -30,8 +30,3 @@ view model =
             ]
         ]
     }
-
-
-toSession : Model -> Session
-toSession model =
-    model.session

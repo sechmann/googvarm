@@ -10,7 +10,6 @@ import Url.Parser as Parser exposing ((</>), Parser, oneOf, s, string)
 type Route
     = Home
     | Contact
-    | Generic String
     | ProductList String
     | Product String
 
@@ -20,7 +19,6 @@ parser =
     oneOf
         [ Parser.map Home Parser.top
         , Parser.map Home (s "home")
-        , Parser.map Generic (s "page" </> string)
         , Parser.map Contact (s "contact")
         , Parser.map Product (s "product" </> string)
         , Parser.map ProductList (s "products" </> string)
@@ -61,9 +59,6 @@ routeToString page =
             case page of
                 Home ->
                     [ "home" ]
-
-                Generic name ->
-                    [ "generic", name ]
 
                 Product name ->
                     [ "product", name ]

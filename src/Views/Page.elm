@@ -1,4 +1,4 @@
-module Views.Page exposing (Page(..), view)
+module Views.Page exposing (view)
 
 import Browser exposing (Document)
 import Element exposing (..)
@@ -11,18 +11,8 @@ import Viewer exposing (Viewer)
 import Views.Navigation exposing (navigation)
 
 
-type Page
-    = Home
-    | Courses
-    | Contact
-    | Generic
-    | Blog
-    | NotImplemented
-    | ProductList
-
-
-view : Maybe Viewer -> Page -> { title : String, content : List (Element msg) } -> Document msg
-view maybeViewer page { title, content } =
+view : Maybe Viewer -> { title : String, content : List (Element msg) } -> Document msg
+view _ { title, content } =
     let
         siteHeader =
             column [ width fill ]

@@ -1,4 +1,4 @@
-module Page.ProductList exposing (..)
+module Page.ProductList exposing (Model, Msg(..), init, update, view)
 
 import Element exposing (Element, text)
 import Element.Region as Region
@@ -14,6 +14,10 @@ type alias Model =
     }
 
 
+type Msg
+    = None
+
+
 init : Session -> List Product -> String -> ( Model, Cmd msg )
 init session products category =
     ( { products = products
@@ -26,7 +30,7 @@ init session products category =
 
 
 update : msg -> Model -> ( Model, Cmd msg )
-update msg model =
+update _ model =
     ( { model | test = model.test + 1 }, Cmd.none )
 
 
@@ -37,12 +41,7 @@ view model =
         [ Element.column []
             [ Element.el [ Region.heading 2 ] (text model.category)
             , Element.column []
-                (Element.el [] (text (String.fromInt model.test)) :: List.map Product.view model.products)
+                (Element.el [] (text (String.fromInt model.test)) :: List.map (Product.view Product.Show) model.products)
             ]
         ]
     }
-
-
-toSession : Model -> Session
-toSession model =
-    model.session

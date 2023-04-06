@@ -1,8 +1,14 @@
-module Product exposing (Product, decoder, encode, view)
+module Product exposing (Mode(..), Product, decoder, encode, view)
 
-import Element exposing (Element, text)
+import Element exposing (Element, el, paragraph, text)
+import Element.Region exposing (heading)
 import Json.Decode as Decode
 import Json.Encode as Encode
+
+
+type Mode
+    = Show
+    | Edit
 
 
 type alias Product =
@@ -29,6 +35,19 @@ decoder =
         (Decode.field "description" Decode.string)
 
 
-view : Product -> Element msg
-view product =
-    Element.el [] (text product.name)
+view : Mode -> Product -> Element msg
+view mode product =
+    case mode of
+        Edit ->
+            Element.column []
+                [ el [ heading 3 ] (text ("edit " ++ product.name))
+                , paragraph [] [ text product.description ]
+                , el [] (text product.price)
+                ]
+
+        Show ->
+            Element.column []
+                [ el [ heading 3 ] (text product.name)
+                , paragraph [] [ text product.description ]
+                , el [] (text product.price)
+                ]

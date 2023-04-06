@@ -1,6 +1,5 @@
-module Page.Generic exposing (Model, Msg, init, toSession, update, view)
+module Page.Generic exposing (Model, init, update, view)
 
-import Browser exposing (Document)
 import Element exposing (..)
 import Session exposing (Session)
 
@@ -11,17 +10,11 @@ type alias Model =
     }
 
 
-type Msg
-    = NoMsg
-
-
-init : Session -> ( Model, Cmd Msg )
+init : Session -> Model
 init session =
-    ( { content = "Generic page goes here"
-      , session = session
-      }
-    , Cmd.none
-    )
+    { content = "Generic page goes here"
+    , session = session
+    }
 
 
 update : Model -> String -> Model
@@ -36,8 +29,3 @@ view model =
         [ text model.content
         ]
     }
-
-
-toSession : Model -> Session
-toSession model =
-    model.session

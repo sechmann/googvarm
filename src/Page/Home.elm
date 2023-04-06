@@ -1,10 +1,9 @@
-module Page.Home exposing (Model, Msg, init, toSession, update, view)
+module Page.Home exposing (Model, Msg, init, update, view)
 
 import Element exposing (Element, centerX, el, fill, image, link, padding, paragraph, row, spacing, text, textColumn, width)
 import Element.Border exposing (shadow)
 import Element.Font as Font
 import Session exposing (Session)
-import String
 import Stylesheet exposing (Color(..), color)
 
 
@@ -73,8 +72,3 @@ view model =
             ]
         ]
     }
-
-
-toSession : Model -> Session
-toSession model =
-    model.session

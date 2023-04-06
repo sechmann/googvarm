@@ -5,13 +5,12 @@ import Browser exposing (Document)
 import Browser.Navigation as Nav
 import Html
 import Json.Decode exposing (Value)
-import Page.Editable as Editable exposing (toSession)
+import Page.Contact as Contact
 import Page.Error as Error
-import Page.Generic as Generic exposing (toSession)
-import Page.Home as Home exposing (toSession)
+import Page.Home as Home
 import Page.ProductList as ProductList
 import ProductCategory exposing (filterCategory)
-import Route exposing (Route(..))
+import Route exposing (Route)
 import Session exposing (Session, navKey)
 import Url exposing (Url)
 import Viewer exposing (Viewer)
@@ -22,8 +21,7 @@ type Model
     = Redirect Session
     | NotFound Session
     | Home Home.Model
-    | Generic Generic.Model
-    | Editable Editable.Model
+    | Contact Contact.Model
     | ProductList String ProductList.Model
 
 
@@ -38,7 +36,7 @@ type Msg
     | UrlChanged Url.Url
     | Ignored
     | GotHomeMsg Home.Msg
-    | GotGenericMsg Generic.Msg
+    | GotProductListMsg ProductList.Msg
 
 
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -117,10 +115,7 @@ changeRouteTo maybeRoute model =
             Home.init session |> updateWith Home GotHomeMsg model
 
         Just Route.Contact ->
-            Generic.init session |> updateWith Generic GotGenericMsg model
-
-        Just (Route.Generic page) ->
-            ( model, Route.replaceUrl (Session.navKey session) (Route.Generic page) )
+            ( Contact (Contact.init session), Cmd.none )
 
         Just (Route.ProductList c) ->
             let
@@ -175,10 +170,10 @@ update msg model =
 view : Model -> Document Msg
 view model =
     let
-        viewPage page toMsg config =
+        viewPage toMsg config =
             let
                 { title, body } =
-                    Page.view (Session.viewer (toSession model)) page config
+                    Page.view (Session.viewer (toSession model)) config
             in
             { title = title
             , body = List.map (Html.map toMsg) body
@@ -186,22 +181,19 @@ view model =
     in
     case model of
         Redirect session ->
-            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
+            viewPage (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
 
         NotFound session ->
-            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
+            viewPage (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
+
+        Contact m ->
+            viewPage (\_ -> Ignored) (Contact.view m)
 
         Home homeModel ->
-            viewPage Page.Home GotHomeMsg (Home.view homeModel)
+            viewPage GotHomeMsg (Home.view homeModel)
 
-        Generic genericModel ->
-            viewPage Page.Generic (\_ -> Ignored) (Generic.view genericModel)
-
-        Editable editableModel ->
-            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = editableModel.session })
-
-        ProductList category productListModel ->
-            viewPage Page.ProductList (\_ -> Ignored) (ProductList.view productListModel)
+        ProductList _ productListModel ->
+            viewPage GotProductListMsg (ProductList.view productListModel)
 
 
 subscriptions : Model -> Sub Msg
@@ -222,22 +214,19 @@ main =
 
 
 toSession : Model -> Session
-toSession page =
-    case page of
+toSession model =
+    case model of
         Redirect session ->
             session
 
         NotFound session ->
             session
 
-        Home model ->
-            model.session
+        Home m ->
+            m.session
 
-        Generic model ->
-            model.session
+        Contact m ->
+            m
 
-        Editable model ->
-            model.session
-
-        ProductList _ model ->
-            model.session
+        ProductList _ m ->
+            m.session
