@@ -3,10 +3,10 @@ module Main exposing (Model, Msg(..), init, main, subscriptions, update, view)
 import Api
 import Browser exposing (Document)
 import Browser.Navigation as Nav
-import Html exposing (Html)
+import Html
 import Json.Decode exposing (Value)
-import Page.Blank as Blank exposing (view)
 import Page.Editable as Editable exposing (toSession)
+import Page.Error as Error
 import Page.Generic as Generic exposing (toSession)
 import Page.Home as Home exposing (toSession)
 import Page.ProductList as ProductList
@@ -19,8 +19,7 @@ import Views.Page as Page exposing (view)
 
 
 type Model
-    = Blank
-    | Redirect Session
+    = Redirect Session
     | NotFound Session
     | Home Home.Model
     | Generic Generic.Model
@@ -139,7 +138,7 @@ changeRouteTo maybeRoute model =
 
 
 updateWith : (subModel -> Model) -> (subMsg -> Msg) -> Model -> ( subModel, Cmd subMsg ) -> ( Model, Cmd Msg )
-updateWith toModel toMsg model ( subModel, subCmd ) =
+updateWith toModel toMsg _ ( subModel, subCmd ) =
     ( toModel subModel
     , Cmd.map toMsg subCmd
     )
@@ -186,14 +185,11 @@ view model =
             }
     in
     case model of
-        Redirect _ ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
-
-        Blank ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
+        Redirect session ->
+            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
 
         NotFound session ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
+            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = session })
 
         Home homeModel ->
             viewPage Page.Home GotHomeMsg (Home.view homeModel)
@@ -202,7 +198,7 @@ view model =
             viewPage Page.Generic (\_ -> Ignored) (Generic.view genericModel)
 
         Editable editableModel ->
-            viewPage Page.NotImplemented (\_ -> Ignored) Blank.view
+            viewPage Page.NotImplemented (\_ -> Ignored) (Error.view { error = "not implemented", session = editableModel.session })
 
         ProductList category productListModel ->
             viewPage Page.ProductList (\_ -> Ignored) (ProductList.view productListModel)
@@ -235,16 +231,13 @@ toSession page =
             session
 
         Home model ->
-            Home.toSession model
+            model.session
 
         Generic model ->
-            Generic.toSession model
+            model.session
 
         Editable model ->
-            Editable.toSession model
+            model.session
 
         ProductList _ model ->
-            ProductList.toSession model
-
-        _ ->
-            Debug.todo "asd"
+            model.session

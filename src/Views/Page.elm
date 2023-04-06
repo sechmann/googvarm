@@ -65,28 +65,3 @@ view maybeViewer page { title, content } =
             )
         ]
     }
-
-
-pageToTitle : Page -> String
-pageToTitle page =
-    case page of
-        Home ->
-            "Hjem"
-
-        Courses ->
-            "Kurs"
-
-        Contact ->
-            "Kontakt"
-
-        NotImplemented ->
-            "Ikke implementert"
-
-        Blog ->
-            "Blog"
-
-        Generic ->
-            "Generic"
-
-        ProductList ->
-            "ProductListTitleFromPage"
