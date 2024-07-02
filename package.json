@@ -2,12 +2,13 @@
   "description": "googvarm",
   "repository": "Sechmann/googvarm",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
-    "css-loader": "^5.2.0",
-    "elm": "^0.19.1-5",
-    "elm-test": "^0.19.1-revision6",
-    "vite": "^3.1.0",
-    "vite-plugin-elm": "^v2.7.2"
+    "css-loader": "^7.1.2",
+    "elm": "^0.19.1-6",
+    "elm-test": "^0.19.1-revision12",
+    "vite": "^5.3.2",
+    "vite-plugin-elm": "^v3.0.1"
   },
   "scripts": {
     "dev": "vite",
