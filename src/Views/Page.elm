@@ -9,6 +9,7 @@ import Element.Region as Region
 import Stylesheet exposing (Color(..), color)
 import Viewer exposing (Viewer)
 import Views.Navigation exposing (navigation)
+import VitePluginHelper
 
 
 view : Maybe Viewer -> { title : String, content : List (Element msg) } -> Document msg
@@ -32,7 +33,7 @@ view _ { title, content } =
                     , link [ alignRight ] { url = "https://goo.gl/maps/g26t1xp4ph33bN4G7", label = text "Ulvedalsveien 150, 2020 Skedsmokorset" }
                     ]
                 , row [ width fill, padding 30 ]
-                    [ image [ centerX ] { src = "assets/logo.svg", description = "Go og varm" }
+                    [ image [ centerX ] { src = VitePluginHelper.asset "/assets/logo.svg", description = "Go og varm" }
                     ]
                 ]
 

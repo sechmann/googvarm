@@ -42,9 +42,6 @@ type Msg
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
 changeRouteTo maybeRoute model =
     let
-        _ =
-            Debug.log "hei" maybeRoute
-
         session =
             toSession model
 

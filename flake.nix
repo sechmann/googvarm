@@ -12,7 +12,6 @@
 
   outputs = inputs @ {
     flake-parts,
-    dream2nix,
     ...
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
