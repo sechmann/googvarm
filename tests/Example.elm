@@ -1,9 +1,8 @@
 module Example exposing (..)
 
-import Expect exposing (Expectation)
-import Json.Decode exposing (Decoder)
-import Json.Encode
-import Product exposing (Product)
+import Expect
+import Json.Encode exposing (string)
+import Product
 import Route
 import Test exposing (..)
 import Url
@@ -31,7 +30,7 @@ suite =
                 product =
                     { name = "Skinnfell", price = "10mnok,- / km^2", description = "description" }
 
-                productString =
+                productJson =
                     """{
   "name": "Skinnfell",
   "price": "10mnok,- / km^2",
@@ -39,20 +38,20 @@ suite =
 }"""
 
                 decodedProduct =
-                    Json.Decode.decodeString Product.decoder productString
+                    Product.decode productJson
 
                 encodedProduct =
-                    Product.encode product
+                    Json.Encode.encode 2 (Product.encode product)
              in
              [ test "decode product" <|
                 \_ ->
                     Expect.equal decodedProduct (Ok product)
              , test "encode product" <|
                 \_ ->
-                    Expect.equal (Json.Encode.encode 2 encodedProduct) productString
+                    Expect.equal encodedProduct productJson
              , test "encode/decode roundtrip" <|
                 \_ ->
-                    Expect.equal (Ok product) (Json.Decode.decodeValue Product.decoder (Product.encode product))
+                    Expect.equal (Ok product) (Product.decode (Json.Encode.encode 2 (Product.encode product)))
              ]
             )
         ]

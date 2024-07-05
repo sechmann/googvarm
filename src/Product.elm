@@ -1,8 +1,8 @@
-module Product exposing (Mode(..), Product, decoder, encode, view)
+module Product exposing (Mode(..), Product, decode, encode, view)
 
 import Element exposing (Element, el, paragraph, text)
 import Element.Region exposing (heading)
-import Json.Decode as Decode
+import Json.Decode as Decode exposing (Error)
 import Json.Encode as Encode
 
 
@@ -25,6 +25,11 @@ encode product =
         , ( "price", Encode.string product.price )
         , ( "description", Encode.string product.description )
         ]
+
+
+decode : String -> Result Error Product
+decode json =
+    Decode.decodeString decoder json
 
 
 decoder : Decode.Decoder Product
