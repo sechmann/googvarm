@@ -50,6 +50,7 @@
               go-tools
               gopls
               gotools
+              httpie
               imagemagick
               nodePackages.terser
               nodejs_22
