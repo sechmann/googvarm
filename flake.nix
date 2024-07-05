@@ -10,10 +10,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = inputs @ {
-    flake-parts,
-    ...
-  }:
+  outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [inputs.flake-root.flakeModule inputs.treefmt-nix.flakeModule inputs.devshell.flakeModule];
       systems = [
@@ -26,15 +23,39 @@
       perSystem = {
         pkgs,
         config,
+        system,
         ...
       }: {
+        _module.args.pkgs = import inputs.nixpkgs {
+          inherit system;
+          overlays = [
+            (final: prev: {
+              go = prev.go.overrideAttrs (_old: {
+                version = "1.22.5";
+                src = prev.fetchurl {
+                  url = "https://go.dev/dl/go1.22.5.src.tar.gz";
+                  hash = "sha256-rJxyPyJJaa7mJLw0/TTJ4T8qIS11xxyAfeZEu0bhEvY=";
+                };
+              });
+            })
+          ];
+        };
         devshells.default = {
           packages =
             (with pkgs; [
               caddy
-              nodejs_22
+              gcc # needed for sqlite3-go
+              gnumake
+              go
+              go-tools
+              gopls
+              gotools
+              imagemagick
               nodePackages.terser
+              nodejs_22
+              protobuf
               shellcheck
+              sqlite-interactive # -interactive gives readline / ncurses
             ])
             ++ (with pkgs.elmPackages; [
               elm
