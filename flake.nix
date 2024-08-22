@@ -57,6 +57,11 @@
               protobuf
               shellcheck
               sqlite-interactive # -interactive gives readline / ncurses
+              rustc
+              cargo
+              rustfmt
+              pre-commit
+              rustPackages.clippy
             ])
             ++ (with pkgs.elmPackages; [
               elm
@@ -66,6 +71,13 @@
               elm-test
             ])
             ++ [config.treefmt.build.wrapper];
+          env = [
+            {
+              name = "RUST_SRC_PATH";
+              value = "${pkgs.rustPlatform.rustLibSrc}";
+            }
+          ];
+          motd = "";
         };
 
         treefmt.config = {
