@@ -10,8 +10,8 @@ import Page.Contact as Contact
 import Page.Error as Error
 import Page.Home as Home
 import Page.ProductList as ProductList
-import Product exposing (Product, productsDecoder)
-import ProductCategory exposing (filterCategory)
+import Product exposing (RemoteProducts(..), productsDecoder)
+import RemoteData
 import Route exposing (Route)
 import Session exposing (Session, navKey)
 import Url exposing (Url)
@@ -32,14 +32,16 @@ init maybeViewer url navKey =
     let
         ( initialModel, initialCmd ) =
             changeRouteTo (Route.fromUrl url)
-                (Redirect (Session.fromViewer navKey maybeViewer Nothing))
+                (Redirect (Session.fromViewer navKey maybeViewer (RemoteProducts RemoteData.NotAsked)))
     in
     ( initialModel
     , Cmd.batch
         [ initialCmd
         , Http.get
             { url = "/products"
-            , expect = Http.expectJson GotInitialProductsResponse productsDecoder
+            , expect =
+                productsDecoder
+                    |> Http.expectJson (RemoteData.fromResult >> RemoteProducts >> GotInitialProductsResponse)
             }
         ]
     )
@@ -51,7 +53,7 @@ type Msg
     | Ignored
     | GotHomeMsg Home.Msg
     | GotProductListMsg ProductList.Msg
-    | GotInitialProductsResponse (Result Http.Error (List Product))
+    | GotInitialProductsResponse RemoteProducts
 
 
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -77,7 +79,6 @@ changeRouteTo maybeRoute model =
             in
             ProductList.init
                 session
-                (Session.products session)
                 category
                 |> updateWith (ProductList category) (\_ -> Ignored) model
 
@@ -114,6 +115,12 @@ update msg model =
         ( GotHomeMsg subMsg, Home homeModel ) ->
             Home.update subMsg homeModel
                 |> updateWith Home GotHomeMsg model
+
+        ( GotInitialProductsResponse response, _ ) ->
+            ( withSession model
+                (Session.withProducts (toSession model) response)
+            , Cmd.none
+            )
 
         ( _, _ ) ->
             -- Disregard messages that arrived for the wrong page.
@@ -183,3 +190,27 @@ toSession model =
 
         ProductList _ m ->
             m.session
+
+
+withSession : Model -> Session -> Model
+withSession model session =
+    case model of
+        Redirect _ ->
+            Redirect session
+
+        NotFound _ ->
+            NotFound session
+
+        Home m ->
+            Home (mapSession m session)
+
+        Contact _ ->
+            Contact session
+
+        ProductList s m ->
+            ProductList s (mapSession m session)
+
+
+mapSession : { a | session : b } -> b -> { a | session : b }
+mapSession model session =
+    { model | session = session }

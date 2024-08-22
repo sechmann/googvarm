@@ -1,13 +1,13 @@
-module Session exposing (Session, fromViewer, navKey, products, viewer)
+module Session exposing (Session, fromViewer, navKey, products, viewer, withProducts)
 
 import Browser.Navigation as Nav
-import Product exposing (Product)
+import Product exposing (RemoteProducts)
 import Viewer exposing (Viewer)
 
 
 type Session
-    = LoggedIn Nav.Key (Maybe (List Product)) Viewer.Viewer
-    | Guest Nav.Key (Maybe (List Product))
+    = LoggedIn Nav.Key RemoteProducts Viewer.Viewer
+    | Guest Nav.Key RemoteProducts
 
 
 viewer : Session -> Maybe Viewer
@@ -20,7 +20,7 @@ viewer session =
             Nothing
 
 
-products : Session -> Maybe (List Product)
+products : Session -> RemoteProducts
 products session =
     case session of
         LoggedIn _ val _ ->
@@ -28,6 +28,16 @@ products session =
 
         Guest _ val ->
             val
+
+
+withProducts : Session -> RemoteProducts -> Session
+withProducts session p =
+    case session of
+        LoggedIn n _ v ->
+            LoggedIn n p v
+
+        Guest n _ ->
+            Guest n p
 
 
 navKey : Session -> Nav.Key
@@ -40,7 +50,7 @@ navKey session =
             key
 
 
-fromViewer : Nav.Key -> Maybe Viewer -> Maybe (List Product) -> Session
+fromViewer : Nav.Key -> Maybe Viewer -> RemoteProducts -> Session
 fromViewer key maybeViewer p =
     case maybeViewer of
         Just viewerVal ->

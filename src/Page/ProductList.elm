@@ -2,13 +2,16 @@ module Page.ProductList exposing (Model, Msg(..), init, update, view)
 
 import Element exposing (Element, text)
 import Element.Region as Region
-import Product exposing (Product)
-import Session exposing (Session)
+import Http
+import Json.Decode exposing (Error(..))
+import Product exposing (RemoteProducts(..))
+import RemoteData exposing (RemoteData(..))
+import Session exposing (Session, products)
+import Url exposing (Protocol(..))
 
 
 type alias Model =
-    { products : Maybe (List Product)
-    , session : Session
+    { session : Session
     , category : String
     , test : Int
     }
@@ -18,10 +21,9 @@ type Msg
     = None
 
 
-init : Session -> Maybe (List Product) -> String -> ( Model, Cmd msg )
-init session products category =
-    ( { products = products
-      , session = session
+init : Session -> String -> ( Model, Cmd msg )
+init session category =
+    ( { session = session
       , category = category
       , test = 0
       }
@@ -41,13 +43,38 @@ view model =
         [ Element.column []
             [ Element.el [ Region.heading 2 ] (text model.category)
             , Element.column []
-                (case model.products of
-                    Nothing ->
+                (case Session.products model.session of
+                    RemoteProducts RemoteData.NotAsked ->
                         [ Element.el [] (text "No products...") ]
 
-                    Just products ->
+                    RemoteProducts RemoteData.Loading ->
+                        Debug.todo "branch 'RemoteProducts Loading' not implemented"
+
+                    RemoteProducts (RemoteData.Failure f) ->
+                        [ Element.el [] (text ("Http error: " ++ errToString f)) ]
+
+                    RemoteProducts (RemoteData.Success products) ->
                         Element.el [] (text (String.fromInt model.test)) :: List.map (Product.view Product.Show) products
                 )
             ]
         ]
     }
+
+
+errToString : Http.Error -> String
+errToString e =
+    case e of
+        Http.BadUrl url ->
+            "BadUrl: " ++ url
+
+        Http.Timeout ->
+            "Timeout"
+
+        Http.NetworkError ->
+            "NetworkError"
+
+        Http.BadStatus statusCode ->
+            "BadStatus: " ++ String.fromInt statusCode
+
+        Http.BadBody body ->
+            "BadBody: " ++ body

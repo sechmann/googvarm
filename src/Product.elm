@@ -1,14 +1,20 @@
-module Product exposing (Mode(..), Product, decode, encode, productsDecoder, view)
+module Product exposing (Mode(..), Product, RemoteProducts(..), decode, encode, productsDecoder, view)
 
 import Element exposing (Element, el, paragraph, text)
 import Element.Region exposing (heading)
+import Http
 import Json.Decode as Decode exposing (Error)
 import Json.Encode as Encode
+import RemoteData exposing (RemoteData)
 
 
 type Mode
     = Show
     | Edit
+
+
+type RemoteProducts
+    = RemoteProducts (RemoteData Http.Error (List Product))
 
 
 type alias Product =
