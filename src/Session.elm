@@ -1,57 +1,50 @@
-module Session exposing (Session, changes, fromViewer, navKey, viewer)
+module Session exposing (Session, fromViewer, navKey, products, viewer)
 
-import Api exposing (Cred)
 import Browser.Navigation as Nav
-import Json.Decode as Decode exposing (Decoder)
-import Json.Encode as Encode exposing (Value)
+import Product exposing (Product)
 import Viewer exposing (Viewer)
 
 
 type Session
-    = LoggedIn Nav.Key Viewer.Viewer
-    | Guest Nav.Key
+    = LoggedIn Nav.Key (Maybe (List Product)) Viewer.Viewer
+    | Guest Nav.Key (Maybe (List Product))
 
 
 viewer : Session -> Maybe Viewer
 viewer session =
     case session of
-        LoggedIn _ val ->
+        LoggedIn _ _ val ->
             Just val
 
-        Guest _ ->
+        Guest _ _ ->
             Nothing
 
 
-credentials : Session -> Maybe Cred
-credentials session =
+products : Session -> Maybe (List Product)
+products session =
     case session of
-        LoggedIn _ val ->
-            Just (Viewer.credentials val)
+        LoggedIn _ val _ ->
+            val
 
-        Guest _ ->
-            Nothing
+        Guest _ val ->
+            val
 
 
 navKey : Session -> Nav.Key
 navKey session =
     case session of
-        LoggedIn key _ ->
+        LoggedIn key _ _ ->
             key
 
-        Guest key ->
+        Guest key _ ->
             key
 
 
-changes : (Session -> msg) -> Nav.Key -> Sub msg
-changes toMsg key =
-    Api.viewerChanges (\maybeViewer -> toMsg (fromViewer key maybeViewer)) Viewer.decoder
-
-
-fromViewer : Nav.Key -> Maybe Viewer -> Session
-fromViewer key maybeViewer =
+fromViewer : Nav.Key -> Maybe Viewer -> Maybe (List Product) -> Session
+fromViewer key maybeViewer p =
     case maybeViewer of
         Just viewerVal ->
-            LoggedIn key viewerVal
+            LoggedIn key p viewerVal
 
         Nothing ->
-            Guest key
+            Guest key p

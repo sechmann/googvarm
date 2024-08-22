@@ -4,11 +4,13 @@ import Api
 import Browser exposing (Document)
 import Browser.Navigation as Nav
 import Html
+import Http
 import Json.Decode exposing (Value)
 import Page.Contact as Contact
 import Page.Error as Error
 import Page.Home as Home
 import Page.ProductList as ProductList
+import Product exposing (Product, productsDecoder)
 import ProductCategory exposing (filterCategory)
 import Route exposing (Route)
 import Session exposing (Session, navKey)
@@ -27,8 +29,20 @@ type Model
 
 init : Maybe Viewer -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init maybeViewer url navKey =
-    changeRouteTo (Route.fromUrl url)
-        (Redirect (Session.fromViewer navKey maybeViewer))
+    let
+        ( initialModel, initialCmd ) =
+            changeRouteTo (Route.fromUrl url)
+                (Redirect (Session.fromViewer navKey maybeViewer Nothing))
+    in
+    ( initialModel
+    , Cmd.batch
+        [ initialCmd
+        , Http.get
+            { url = "/products"
+            , expect = Http.expectJson GotInitialProductsResponse productsDecoder
+            }
+        ]
+    )
 
 
 type Msg
@@ -37,6 +51,7 @@ type Msg
     | Ignored
     | GotHomeMsg Home.Msg
     | GotProductListMsg ProductList.Msg
+    | GotInitialProductsResponse (Result Http.Error (List Product))
 
 
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -44,65 +59,6 @@ changeRouteTo maybeRoute model =
     let
         session =
             toSession model
-
-        initialCategories =
-            [ { name = "skinnprodukter"
-              , products =
-                    [ { name = "Sengefell"
-                      , price = "7000,- pr kvm + tekstil"
-                      , description = "Fell til enkeltseng. Du kan velge pelsfarge (rase) og om du vil ha åkle eller trykk på fellen. Størrelse ca 1x1,8 meter. Syr også til dobbeltseng. Ring for bestilling! Syr gjerne til gamle åkler også."
-                      }
-                    ]
-              }
-            , { name = "saueskinn"
-              , products =
-                    [ { name = "Saueskinn"
-                      , price = "2000,- pr stk"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    ]
-              }
-            , { name = "toving"
-              , products =
-                    [ { name = "Ull"
-                      , price = "200,-"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    ]
-              }
-            , { name = "alpakkagarn"
-              , products =
-                    [ { name = "Alpakkagarn 1"
-                      , price = "10,- pr g"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    , { name = "Alpakkagarn 2"
-                      , price = "12,- pr g"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    ]
-              }
-            , { name = "ullundertøy"
-              , products =
-                    [ { name = "Bokser"
-                      , price = "400,-"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    , { name = "Sokker"
-                      , price = "400,- pr par"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    ]
-              }
-            , { name = "skinn"
-              , products =
-                    [ { name = "Kuskinn"
-                      , price = "3000,-"
-                      , description = "Lorem Ipsum etc mer tekst kan komme her"
-                      }
-                    ]
-              }
-            ]
     in
     case maybeRoute of
         Nothing ->
@@ -121,7 +77,7 @@ changeRouteTo maybeRoute model =
             in
             ProductList.init
                 session
-                (filterCategory category initialCategories)
+                (Session.products session)
                 category
                 |> updateWith (ProductList category) (\_ -> Ignored) model
 

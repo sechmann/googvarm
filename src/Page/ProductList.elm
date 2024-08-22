@@ -7,7 +7,7 @@ import Session exposing (Session)
 
 
 type alias Model =
-    { products : List Product
+    { products : Maybe (List Product)
     , session : Session
     , category : String
     , test : Int
@@ -18,7 +18,7 @@ type Msg
     = None
 
 
-init : Session -> List Product -> String -> ( Model, Cmd msg )
+init : Session -> Maybe (List Product) -> String -> ( Model, Cmd msg )
 init session products category =
     ( { products = products
       , session = session
@@ -41,7 +41,13 @@ view model =
         [ Element.column []
             [ Element.el [ Region.heading 2 ] (text model.category)
             , Element.column []
-                (Element.el [] (text (String.fromInt model.test)) :: List.map (Product.view Product.Show) model.products)
+                (case model.products of
+                    Nothing ->
+                        [ Element.el [] (text "No products...") ]
+
+                    Just products ->
+                        Element.el [] (text (String.fromInt model.test)) :: List.map (Product.view Product.Show) products
+                )
             ]
         ]
     }

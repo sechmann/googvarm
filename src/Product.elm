@@ -1,4 +1,4 @@
-module Product exposing (Mode(..), Product, decode, encode, view)
+module Product exposing (Mode(..), Product, decode, encode, productsDecoder, view)
 
 import Element exposing (Element, el, paragraph, text)
 import Element.Region exposing (heading)
@@ -38,6 +38,16 @@ decoder =
         (Decode.field "name" Decode.string)
         (Decode.field "price" Decode.string)
         (Decode.field "description" Decode.string)
+
+
+productsDecoder : Decode.Decoder (List Product)
+productsDecoder =
+    Decode.list
+        (Decode.map3 Product
+            (Decode.field "name" Decode.string)
+            (Decode.field "price" Decode.string)
+            (Decode.field "description" Decode.string)
+        )
 
 
 view : Mode -> Product -> Element msg
